@@ -1,4 +1,4 @@
-// https://codeforces.com/contest/1758/problem/a
+// https://codeforces.com/contest/1758/problem/b
 macro_rules! input{
     ($iter:expr) => {};
     ($iter:expr,) => {};
@@ -32,13 +32,18 @@ use std::str;
 fn run(out: &mut BufWriter<impl Write>, src: &str) {
     input! {
         src = src,
-
         t: usize,
-        ts: [String; t]
+        ns: [u32; t]
     }
-    for string in ts {
-        let mut result = string.clone();
-        result.push_str(&string.chars().rev().collect::<String>());
+
+    for n in ns {
+        let result = if n%2 == 1 {
+            (0..n).map(|_| "1").collect::<Vec<&str>>().join(" ")
+        } else {
+            let mut twos = (0..n-2).map(|_| "2").collect::<Vec<&str>>().join(" ");
+            twos.push_str(" 1 3");
+            twos
+        };
         writeln!(out, "{}", result).unwrap();
     }
 }
@@ -59,18 +64,19 @@ fn main() {
 fn test_0() {
     let vec = Vec::new();
     let mut out = BufWriter::with_capacity(100, vec);
-    run(&mut out,
-        "4
-a
-sururu
-errorgorn
-anutforajaroftuna"
+    run(
+        &mut out, "3
+1
+4
+3",
     );
-
     let vec = out.into_inner().unwrap();
     let result = str::from_utf8(&vec).unwrap();
-    assert_eq!(result.trim(), "aa
-suurruurruus
-rgnororerrerorongr
-aannuuttffoorraajjaarrooffttuunnaa");
+    assert_eq!(
+        result.trim(),
+        "1
+13 2 8 1
+1 1 1"
+    );
 }
+
